@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Molandak Fall</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
+        body {
+            font-family: 'Press Start 2P', cursive;
+            text-align: center;
+            background-color: #0d0d0d;
+            color: #00ffcc;
+            margin: 0;
+            padding: 0;
+        }
+        h1, p {
+            text-shadow: 2px 2px 4px rgba(0, 255, 204, 0.6);
+        }
+        canvas {
+            background-color: #222;
+            display: block;
+            margin: 20px auto;
+            border: 2px solid #00ffcc;
+            box-shadow: 0px 0px 10px #00ffcc;
+        }
+        .controls {
+            margin-top: 20px;
+        }
+        button {
+            background-color: #00ffcc;
+            border: none;
+            padding: 10px 20px;
+            font-family: 'Press Start 2P', cursive;
+            cursor: pointer;
+            margin: 5px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 4px rgba(0, 255, 204, 0.6);
+        }
+        button:hover {
+            background-color: #008f8f;
+        }
+    </style>
+</head>
+<body>
+    <h1>Molandak Fall</h1>
+    <p>Save Molandak by clicking before he hits the ground!</p>
+    <p>HP: <span id="hp">5</span> | Score: <span id="score">0</span></p>
+    <canvas id="gameCanvas" width="400" height="600"></canvas>
+    <div class="controls">
+        <button onclick="startGame('easy')">Easy</button>
+        <button onclick="startGame('normal')">Normal</button>
+        <button onclick="startGame('hard')">Hard</button>
+        <button onclick="startGame('og')">OG</button>
+    </div>
+    
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        let hp = 5;
+        let score = 0;
+        let gameInterval;
+        let speed = 2;
+        let molandak = { x: 200, y: 0, radius: 20 };
+
+        function startGame(difficulty) {
+            switch (difficulty) {
+                case 'easy': speed = 2; break;
+                case 'normal': speed = 4; break;
+                case 'hard': speed = 6; break;
+                case 'og': speed = 8; break;
+            }
+            hp = 5;
+            score = 0;
+            molandak.y = 0;
+            clearInterval(gameInterval);
+            gameInterval = setInterval(updateGame, 20);
+        }
+
+        function updateGame() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#00ffcc";
+            ctx.beginPath();
+            ctx.arc(molandak.x, molandak.y, molandak.radius, 0, Math.PI * 2);
+            ctx.fill();
+            molandak.y += speed;
+            if (molandak.y >= canvas.height) {
+                hp--;
+                document.getElementById("hp").textContent = hp;
+                molandak.y = 0;
+                if (hp <= 0) {
+                    clearInterval(gameInterval);
+                    alert("Game Over! Score: " + score);
+                }
+            }
+        }
+
+        canvas.addEventListener("click", function(event) {
+            const rect = canvas.getBoundingClientRect();
+            const clickX = event.clientX - rect.left;
+            const clickY = event.clientY - rect.top;
+            const dx = clickX - molandak.x;
+            const dy = clickY - molandak.y;
+            if (Math.sqrt(dx * dx + dy * dy) <= molandak.radius) {
+                score++;
+                document.getElementById("score").textContent = score;
+                molandak.y = 0;
+            }
+        });
+    </script>
+</body>
+</html>
