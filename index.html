@@ -1,113 +1,625 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Molandak Fall</title>
+    <title>Save The Molandak</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-        
-        body {
-            font-family: 'Press Start 2P', cursive;
-            text-align: center;
-            background-color: #0d0d0d;
-            color: #00ffcc;
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
         }
-        h1, p {
-            text-shadow: 2px 2px 4px rgba(0, 255, 204, 0.6);
+
+        body {
+            background: url(background.jpg) no-repeat center center fixed;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
         }
-        canvas {
-            background-color: #222;
-            display: block;
-            margin: 20px auto;
-            border: 2px solid #00ffcc;
-            box-shadow: 0px 0px 10px #00ffcc;
+
+        .container {
+            width: 1200px;
+            height: 600px;
+            position: relative;
         }
-        .controls {
-            margin-top: 20px;
+
+
+        #welcome-screen {
+            width: 1200px;
+            height: 600px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
-        button {
-            background-color: #00ffcc;
-            border: none;
-            padding: 10px 20px;
-            font-family: 'Press Start 2P', cursive;
+
+        .logo {
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+        }
+
+        .difficulty-selection {
+            display: flex;
+            gap: 20px;
+            margin-top: 40px;
+            justify-content: center;
+        }
+
+        .difficulty-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            width: 200px;
             cursor: pointer;
-            margin: 5px;
-            border-radius: 5px;
-            box-shadow: 2px 2px 4px rgba(0, 255, 204, 0.6);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
         }
-        button:hover {
-            background-color: #008f8f;
+
+        .difficulty-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(138, 43, 226, 0.5);
+        }
+
+        .difficulty-card h3 {
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .difficulty-card p {
+            font-size: 0.9em;
+            color: #fff;
+        }
+
+
+        #game-screen {
+            width: 1200px;
+            height: 500px;
+            display: none;
+        }
+
+        #game-container {
+            width: 1200px;
+            height: 500px;
+            background: rgba(30, 30, 46, 0.5);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            user-select: none;
+            outline: none;
+        }
+
+        .stats-bar {
+            height: 50px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            align-items: center;
+            padding: 0 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            margin-bottom: 10px;
+            user-select: none;
+            outline: none;
+        }
+
+        .stat {
+            padding: 8px 16px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            font-weight: 600;
+            text-align: center;
+            user-select: none;
+            outline: none;
+        }
+        
+        .fire {
+            width: 2560px;
+            height: 1440px;
+            position: absolute;
+            bottom: 0px;
+            background: url('fire.png') no-repeat center center;
+            background-size: contain;
+            animation: flicker 0.2s infinite alternate, wave 1s infinite linear;
+            z-index: 1;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.8; filter: hue-rotate(0deg); }
+            100% { opacity: 1; filter: hue-rotate(10deg); }
+        }
+
+        @keyframes wave {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0); }
+        }
+
+
+        #timer-display {
+            justify-self: start;
+            user-select: none;
+            outline: none;
+        }
+
+        #hp-display {
+            justify-self: center;
+            user-select: none;
+            outline: none;
+        }
+
+        #score-display {
+            justify-self: center;
+            user-select: none;
+            outline: none;
+        }
+
+        #difficulty-display {
+            justify-self: end;
+            user-select: none;
+            outline: none;
+        }
+        .difficulty-card.og {
+            background: linear-gradient(145deg, rgba(255, 0, 0, 0.2), rgba(138, 43, 226, 0.2));
+            border: 2px solid rgba(255, 0, 0, 0.5);
+        }
+
+        .difficulty-card.og:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 0, 0, 0.8);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+        }
+
+        .pause-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            z-index: 100;
+        }
+
+        .pause-menu {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(30, 30, 46, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            display: none;
+            z-index: 100;
+        }
+
+        .pause-menu h2 {
+            margin-bottom: 20px;
+        }
+
+        .molandak {
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            background: url('molandak.png') no-repeat center center;
+            background-size: contain;
+            cursor: pointer;
+            transition: transform 0.2s;
+            user-select: none;
+            outline: none;
+            z-index: 10;
+        }
+
+        .molandak:hover {
+            transform: scale(1.1);
+        }
+
+        #game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(30, 30, 46, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            display: none;
+            z-index: 100;
+        }
+
+        .button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(145deg, #9c27b0, #673ab7);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .game-logo {
+            width: 200px;
+            height: 200px;
+            margin-bottom: 20px;
+            object-fit: contain;
+        }
+
+        .social-links {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .social-icon {
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-3px);
+        }
+
+        .social-divider {
+            width: 2px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+
+        .social-icon svg {
+            fill: #fff;
+            transition: fill 0.3s ease;
+        }
+
+        .social-icon:hover svg {
+            fill: #9c27b0;
         }
     </style>
 </head>
+
 <body>
-    <h1>Molandak Fall</h1>
-    <p>Save Molandak by clicking before he hits the ground!</p>
-    <p>HP: <span id="hp">5</span> | Score: <span id="score">0</span></p>
-    <canvas id="gameCanvas" width="400" height="600"></canvas>
-    <div class="controls">
-        <button onclick="startGame('easy')">Easy</button>
-        <button onclick="startGame('normal')">Normal</button>
-        <button onclick="startGame('hard')">Hard</button>
-        <button onclick="startGame('og')">OG</button>
-    </div>
+    <audio id="bg-music" loop>
+        <source src="bgm.mp3" type="audio/mpeg">
+    </audio>
     
+    <div class="container">
+        <div id="welcome-screen">
+            <img src="logo.png" alt="Save The Molandak Logo" class="game-logo">
+            
+            <h1 class="logo">Save The Molandak</h1>
+            <p>Help save falling Molandaks by clicking them before they hit the ground!</p>
+            
+            <div class="difficulty-selection">
+                <div class="difficulty-card" onclick="startGame('easy')">
+                    <h3>Easy</h3>
+                    <p>New Baby</p>
+                </div>
+                <div class="difficulty-card" onclick="startGame('normal')">
+                    <h3>Normal</h3>
+                    <p>Balaced</p>
+                </div>
+                <div class="difficulty-card" onclick="startGame('extreme')">
+                    <h3>Extreme</h3>
+                    <p>Paperhand Person</p>
+                </div>
+                <div class="difficulty-card og" onclick="startGame('og')">
+                    <h3>OG</h3>
+                    <p>Real OG</p>
+                </div>
+            </div>
+
+            <div class="social-links">
+                <a href="#" class="social-icon" onclick="window.open('https://x.com/monad_xyz')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                </a>
+
+                <div class="social-divider"></div>
+
+                <a href="#" class="social-icon" onclick="window.open('https://discord.gg/monad')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+                        <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <div id="game-screen">
+            <div class="stats-bar">
+                <div class="stat" id="timer-display">Time: 60s</div>
+                <div class="stat" id="hp-display">HP: 5</div>
+                <div class="stat" id="score-display">Score: 0</div>
+                <div class="stat" id="difficulty-display"></div>
+            </div>
+            <div id="game-container">
+                <button class="pause-button" onclick="togglePause()">⏸️</button>
+                <div id="pause-menu" class="pause-menu">
+                    <h2>Game Paused</h2>
+                    <button class="button" onclick="resumeGame()">Resume</button>
+                    <button class="button" onclick="retryGame()">Retry</button>
+                </div>
+                <div id="game-over">
+                    <h2>Game Over!</h2>
+                    <p>Final Score: <span id="final-score">0</span></p>
+                    <button class="button" onclick="resetGame()">Play Again</button>
+                    <button class="button" onclick="shareScore()">Share on X</button>
+                </div>
+                <div class="fire"></div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        const canvas = document.getElementById("gameCanvas");
-        const ctx = canvas.getContext("2d");
         let hp = 5;
         let score = 0;
-        let gameInterval;
-        let speed = 2;
-        let molandak = { x: 200, y: 0, radius: 20 };
+        let isGameRunning = false;
+        let isPaused = false;
+        let spawnInterval;
+        let currentDifficulty = '';
+        let timeLeft = 60;
+        let timerInterval;
+
+        const bgMusic = document.getElementById("bg-music");
+        const difficultySettings = {
+            easy: { interval: 2000, speed: 2, multiplier: 1 },
+            normal: { interval: 1500, speed: 3, multiplier: 1.5 },
+            extreme: { interval: 1000, speed: 4, multiplier: 2 },
+            og: { interval: 500, speed: 6, multiplier: 3 }
+        };
+
 
         function startGame(difficulty) {
-            switch (difficulty) {
-                case 'easy': speed = 2; break;
-                case 'normal': speed = 4; break;
-                case 'hard': speed = 6; break;
-                case 'og': speed = 8; break;
-            }
+            currentDifficulty = difficulty;
+            document.getElementById('welcome-screen').style.display = 'none';
+            document.getElementById('game-screen').style.display = 'block';
+
             hp = 5;
             score = 0;
-            molandak.y = 0;
-            clearInterval(gameInterval);
-            gameInterval = setInterval(updateGame, 20);
+            timeLeft = 60;
+            isGameRunning = true;
+            isPaused = false;
+
+            updateUI();
+            document.getElementById('difficulty-display').textContent = `Mode: ${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}`;
+
+            if (spawnInterval) clearInterval(spawnInterval);
+            if (timerInterval) clearInterval(timerInterval);
+
+            spawnInterval = setInterval(spawnMolandak, difficultySettings[difficulty].interval);
+            startTimer();
+
+            bgMusic.volume = 1;
+            bgMusic.currentTime = 0;
+            bgMusic.play();
         }
 
-        function updateGame() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#00ffcc";
-            ctx.beginPath();
-            ctx.arc(molandak.x, molandak.y, molandak.radius, 0, Math.PI * 2);
-            ctx.fill();
-            molandak.y += speed;
-            if (molandak.y >= canvas.height) {
-                hp--;
-                document.getElementById("hp").textContent = hp;
-                molandak.y = 0;
-                if (hp <= 0) {
-                    clearInterval(gameInterval);
-                    alert("Game Over! Score: " + score);
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                if (!isPaused) {
+                    timeLeft--;
+                    document.getElementById('timer-display').textContent = `Time: ${timeLeft}s`;
+                    
+                    if (timeLeft <= 0) {
+                        gameOver();
+                    }
                 }
-            }
+            }, 1000);
         }
 
-        canvas.addEventListener("click", function(event) {
-            const rect = canvas.getBoundingClientRect();
-            const clickX = event.clientX - rect.left;
-            const clickY = event.clientY - rect.top;
-            const dx = clickX - molandak.x;
-            const dy = clickY - molandak.y;
-            if (Math.sqrt(dx * dx + dy * dy) <= molandak.radius) {
-                score++;
-                document.getElementById("score").textContent = score;
-                molandak.y = 0;
+        function createFire() {
+            const fire = document.createElement("div");
+            fire.classList.add("fire");
+
+            const container = document.getElementById("game-container");
+            fire.style.left = Math.random() * (container.offsetWidth - 80) + "px";
+            fire.style.bottom = "10px"; 
+
+            container.appendChild(fire);
+
+            setTimeout(() => {
+                fire.remove();
+            }, 5000);
+        }
+
+
+        setInterval(createFire, 1000);
+
+        
+        function togglePause() {
+            isPaused = !isPaused;
+            const pauseMenu = document.getElementById('pause-menu');
+            pauseMenu.style.display = isPaused ? 'block' : 'none';
+        }
+
+        function resumeGame() {
+            isPaused = false;
+            document.getElementById('pause-menu').style.display = 'none';
+        }
+
+        function retryGame() {
+            resetGame();
+            document.getElementById('pause-menu').style.display = 'none';
+        }
+
+        function spawnMolandak() {
+            if (isPaused) return;
+            
+            const molandak = document.createElement('div');
+            molandak.className = 'molandak';
+            
+            const gameContainer = document.getElementById('game-container');
+            const maxX = gameContainer.offsetWidth - 50;
+            
+            molandak.style.left = Math.random() * maxX + 'px';
+            molandak.style.top = '0px';
+            
+            molandak.onclick = () => {
+                if (!isPaused) {
+                    gameContainer.removeChild(molandak);
+                    score += 10 * difficultySettings[currentDifficulty].multiplier;
+                    updateUI();
+                }
+            };
+            
+            gameContainer.appendChild(molandak);
+            
+            let posY = 0;
+            const fallInterval = setInterval(() => {
+                if (!isGameRunning || isPaused) {
+                    return;
+                }
+                
+                posY += difficultySettings[currentDifficulty].speed;
+                molandak.style.top = posY + 'px';
+                
+                if (posY > gameContainer.offsetHeight) {
+                    if (molandak.parentNode) {
+                        gameContainer.removeChild(molandak);
+                        hp--;
+                        updateUI();
+                        
+                        if (hp <= 0) {
+                            gameOver();
+                        }
+                    }
+                    clearInterval(fallInterval);
+                }
+            }, 20);
+        }
+
+        function updateUI() {
+            document.getElementById('hp-display').textContent = `HP: ${hp}`;
+            document.getElementById('score-display').textContent = `Score: ${Math.floor(score)}`;
+            document.getElementById('timer-display').textContent = `Time: ${timeLeft}s`;
+        }
+
+        function gameOver() {
+            isGameRunning = false;
+            if (spawnInterval) clearInterval(spawnInterval);
+            if (timerInterval) clearInterval(timerInterval);
+            
+            document.getElementById('game-over').style.display = 'block';
+            document.getElementById('final-score').textContent = Math.floor(score);
+        }
+
+        function resetGame() {
+            document.getElementById('game-over').style.display = 'none';
+            document.getElementById('game-screen').style.display = 'none';
+            document.getElementById('welcome-screen').style.display = 'flex';
+        }
+
+        function shareScore() {
+            const difficulty = currentDifficulty.charAt(0).toUpperCase() + currentDifficulty.slice(1);
+            const finalScore = Math.floor(score);
+            const rank = getRank(finalScore, currentDifficulty);
+            
+            const tweetText = `🎮 Save The Molandak\n\n` +
+                            `Mode: ${difficulty}\n` +
+                            `Score: ${finalScore} points\n` +
+                            `Rank: ${rank}\n\n` +
+                            `Can you beat my score? 🏆\n` +
+                            `#SaveTheMolandak #GameDev`;
+            
+            const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
+            window.open(tweetUrl, '_blank');
+        }
+
+        function getRank(score, difficulty) {
+            const thresholds = {
+                easy: {
+                    S: 500,
+                    A: 400,
+                    B: 300,
+                    C: 200,
+                    D: 100
+                },
+                normal: {
+                    S: 750,
+                    A: 600,
+                    B: 450,
+                    C: 300,
+                    D: 150
+                },
+                extreme: {
+                    S: 1000,
+                    A: 800,
+                    B: 600,
+                    C: 400,
+                    D: 200
+                },
+                og: {
+                    S: 1500,
+                    A: 1200,
+                    B: 900,
+                    C: 600,
+                    D: 300
+                }
+            };
+
+            const ranks = thresholds[difficulty];
+            if (score >= ranks.S) return 'S';
+            if (score >= ranks.A) return 'A';
+            if (score >= ranks.B) return 'B';
+            if (score >= ranks.C) return 'C';
+            if (score >= ranks.D) return 'D';
+            return 'E';
+        }
+
+        function shareScore() {
+            const difficulty = currentDifficulty.toUpperCase();
+            const finalScore = Math.floor(score);
+            const rank = getRank(finalScore, currentDifficulty);
+            
+            const tweetText = `🎮 Save The Molandak\n\n` +
+                            `Mode: ${difficulty}\n` +
+                            `Score: ${finalScore} points\n` +
+                            `Rank: ${rank}\n\n` +
+                            `${getScoreMessage(rank, difficulty)}\n` +
+                            `#SaveTheMolandak #GameDev`;
+            
+            const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
+            window.open(tweetUrl, '_blank');
+        }
+
+        function getScoreMessage(rank, difficulty) {
+            if (difficulty === 'og') {
+                if (rank === 'S') return '👑 True OG Legend! Can you beat this? 🏆';
+                if (rank === 'A') return '🔥 Almost legendary! Try again for S rank!';
+                return 'Can you become an OG Legend? 🎯';
+            } else {
+                if (rank === 'S') return '🏆 Can you beat my score?';
+                return 'Think you can do better? Try it! 🎯';
             }
-        });
+        }
     </script>
 </body>
 </html>
