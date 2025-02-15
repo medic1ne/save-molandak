@@ -164,6 +164,7 @@
             width: 200%;
             height: 80%;
             position: absolute;
+            bottom: -5%;
             background: url('fire.png') no-repeat center bottom;
             background-size: 100% 100%;
             animation: flicker 0.2s infinite alternate, wave 1s infinite linear;
@@ -339,7 +340,7 @@
             gap: 15px;
             align-items: center;
         }
-        
+
         @media (min-width: 768px) {
             .social-links {
                 bottom: 20px;
@@ -524,12 +525,13 @@
 
             const container = document.getElementById("game-container");
             fire.style.left = Math.random() * (container.offsetWidth - 80) + "px";
+            fire.style.bottom = "10px"; 
 
             container.appendChild(fire);
 
             setTimeout(() => {
                 fire.remove();
-            }, 1000);
+            }, 5000);
         }
 
 
@@ -678,12 +680,12 @@
 
         function getScoreMessage(rank, difficulty) {
             if (difficulty === 'og') {
-                if (rank === 'S') return '👑 True OG Legend! Can you beat this? 🏆';
-                if (rank === 'A') return '🔥 Almost legendary! Try again for S rank!';
-                return 'Can you become an OG Legend? 🎯';
+                if (rank === 'S') return 'rue OG Legend! Can you beat this?';
+                if (rank === 'A') return 'Almost legendary! Try again for S rank!';
+                return 'Can you become an OG Legend? ';
             } else {
-                if (rank === 'S') return '🏆 Can you beat my score?';
-                return 'Think you can do better? Try it! 🎯';
+                if (rank === 'S') return 'Can you beat my score?';
+                return 'Think you can do better? Try it! ';
             }
         }
     </script>
