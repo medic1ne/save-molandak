@@ -525,13 +525,12 @@
 
             const container = document.getElementById("game-container");
             fire.style.left = Math.random() * (container.offsetWidth - 80) + "px";
-            fire.style.bottom = "10px"; 
 
             container.appendChild(fire);
 
             setTimeout(() => {
                 fire.remove();
-            }, 5000);
+            }, 1000);
         }
 
 
@@ -619,22 +618,6 @@
             document.getElementById('game-over').style.display = 'none';
             document.getElementById('game-screen').style.display = 'none';
             document.getElementById('welcome-screen').style.display = 'flex';
-        }
-
-        function shareScore() {
-            const difficulty = currentDifficulty.charAt(0).toUpperCase() + currentDifficulty.slice(1);
-            const finalScore = Math.floor(score);
-            const rank = getRank(finalScore, currentDifficulty);
-            
-            const tweetText = `☄️ Save The Molandak on @monad_xyz\n\n` +
-                            `Mode: ${difficulty}\n` +
-                            `Score: ${finalScore} points\n` +
-                            `Rank: ${rank}\n\n` +
-                            `Can you beat my score? 🏆\n` +
-                            `#SaveTheMolandak #Monad #Indonads`;
-            
-            const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
-            window.open(tweetUrl, '_blank');
         }
 
         function getRank(score, difficulty) {
