@@ -95,7 +95,7 @@
 
         #game-container {
             width: 100%;
-            height: calc(100vh - 40px); /* Subtract stats-bar height + margin */
+            height: calc(100vh - 40px);
             background: rgba(30, 30, 46, 0.5);
             position: relative;
             overflow: hidden;
@@ -161,8 +161,8 @@
         }
         
         .fire {
-            width: 100%;
-            height: 40%;
+            width: 200%;
+            height: 80%;
             position: absolute;
             bottom: -5%;
             background: url('fire.png') no-repeat center bottom;
@@ -249,8 +249,8 @@
         }
 
         .molandak {
-            width: 60px;
-            height: 60px;
+            width: 70px;
+            height: 70px;
             position: absolute;
             background: url('molandak.png') no-repeat center center;
             background-size: contain;
@@ -626,12 +626,12 @@
             const finalScore = Math.floor(score);
             const rank = getRank(finalScore, currentDifficulty);
             
-            const tweetText = `🎮 Save The Molandak\n\n` +
+            const tweetText = `☄️ Save The Molandak on @monad_xyz\n\n` +
                             `Mode: ${difficulty}\n` +
                             `Score: ${finalScore} points\n` +
                             `Rank: ${rank}\n\n` +
                             `Can you beat my score? 🏆\n` +
-                            `#SaveTheMolandak #GameDev`;
+                            `#SaveTheMolandak #Monad #Indonads`;
             
             const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
             window.open(tweetUrl, '_blank');
@@ -688,7 +688,7 @@
                             `Score: ${finalScore} points\n` +
                             `Rank: ${rank}\n\n` +
                             `${getScoreMessage(rank, difficulty)}\n` +
-                            `can your beat me? play here : http://save-molandak.vercel.app`;
+                            `play here : http://save-molandak.vercel.app`;
             
             const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
             window.open(tweetUrl, '_blank');
