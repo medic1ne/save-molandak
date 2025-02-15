@@ -5,380 +5,372 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-}
+        body {
+            background: url(background.jpg) no-repeat center center fixed;
+            background-size: cover;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            padding: 0;
+        }
 
-body {
-    background: url(background.jpg) no-repeat center center fixed;
-    background-size: cover;
-    width: 100%;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #fff;
-    padding: 0;
-}
+        .container {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+        }
 
-.container {
-    width: 100%;
-    height: 100vh;
-    position: relative;
-}
+        #welcome-screen {
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 40px 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
 
+        .logo {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+        }
 
-#welcome-screen {
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    padding: 40px 20px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 0;
-    left: 0;
-}
+        .difficulty-selection {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 40px;
+            justify-content: center;
+        }
 
-.logo {
-    font-size: 2.5em;
-    margin-bottom: 20px;
-    color: #fff;
-    text-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
-}
+        .difficulty-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 200px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
 
+        .difficulty-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(138, 43, 226, 0.5);
+        }
 
-.difficulty-selection {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    margin-top: 40px;
-    justify-content: center;
-}
+        .difficulty-card h3 {
+            margin-bottom: 10px;
+            color: #fff;
+        }
 
-.difficulty-card {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 20px;
-    border-radius: 15px;
-    width: 100%;
-    max-width: 200px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-}
+        .difficulty-card p {
+            font-size: 0.9em;
+            color: #fff;
+        }
 
-.difficulty-card:hover {
-    transform: translateY(-5px);
-    border-color: rgba(138, 43, 226, 0.5);
-}
+        #game-screen {
+            width: 100%;
+            height: 100vh;
+            display: none;
+        }
 
-.difficulty-card h3 {
-    margin-bottom: 10px;
-    color: #fff;
-}
+        #game-container {
+            width: 100%;
+            height: calc(100vh - 40px); /* Subtract stats-bar height + margin */
+            background: rgba(30, 30, 46, 0.5);
+            position: relative;
+            overflow: hidden;
+            user-select: none;
+            outline: none;
+        }
 
-.difficulty-card p {
-    font-size: 0.9em;
-    color: #fff;
-}
+        .stats-bar {
+            height: 70px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 10px;
+            user-select: none;
+            outline: none;
+        }
 
+        .stat {
+            padding: 10px 15px;
+            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            font-weight: 600;
+            text-align: center;
+            user-select: none;
+            outline: none;
+            font-size: 0.95em;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+            min-width: calc(50% - 10px);
+            margin: 2px 5px;
+        }
 
-#game-screen {
-    width: 100%;
-    height: 100vh;
-    display: none;
-    flex-direction: column;
-}
+        .left-stats, .right-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
 
-.stats-bar {
-    width: 100%;
-    padding: 10px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    gap: 5px;
-}
+        @media (min-width: 768px) {
+            .stats-bar {
+                height: 60px;
+                flex-wrap: nowrap;
+                gap: 15px;
+            }
+            
+            .logo {
+                font-size: 3em;
+            }
+            
+            #game-container {
+                height: calc(100vh - 70px);
+            }
+            
+            .stat {
+                min-width: auto;
+                margin: 0;
+            }
+            
+            .left-stats, .right-stats {
+                flex-direction: row;
+            }
+        }
+        
+        .fire {
+            width: 100%;
+            height: 40%;
+            position: absolute;
+            bottom: -5%;
+            background: url('fire.png') no-repeat center bottom;
+            background-size: 100% 100%;
+            animation: flicker 0.2s infinite alternate, wave 1s infinite linear;
+            z-index: 1;
+        }
 
-.left-stats, .right-stats {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-}
+        @keyframes flicker {
+            0% { opacity: 0.8; filter: hue-rotate(0deg); }
+            100% { opacity: 1; filter: hue-rotate(10deg); }
+        }
 
-.stat {
-    padding: 10px;
-    border-radius: 15px;
-    background: rgba(0, 0, 0, 0.3);
-    font-weight: 600;
-    text-align: center;
-    user-select: none;
-    outline: none;
-    font-size: 0.9em;
-    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
-    min-width: calc(50% - 10px);
-    margin: 2px 5px;
-}
+        @keyframes wave {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0); }
+        }
 
-#game-container {
-    flex: 1;
-    width: 100%;
-    position: relative;
-    overflow: hidden;
-    user-select: none;
-    outline: none;
-    background: rgba(30, 30, 46, 0.5);
-}
+        .difficulty-card.og {
+            background: linear-gradient(145deg, rgba(255, 0, 0, 0.2), rgba(138, 43, 226, 0.2));
+            border: 2px solid rgba(255, 0, 0, 0.5);
+        }
 
-/* Fire animation */
-.fire {
-    width: 100%;
-    height: 40%;
-    position: absolute;
-    bottom: -5%;
-    background: url('fire.png') no-repeat center bottom;
-    background-size: 100% 100%;
-    animation: flicker 0.2s infinite alternate, wave 1s infinite linear;
-    z-index: 1;
-}
+        .difficulty-card.og:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 0, 0, 0.8);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+        }
 
-@keyframes flicker {
-    0% { opacity: 0.8; filter: hue-rotate(0deg); }
-    100% { opacity: 1; filter: hue-rotate(10deg); }
-}
+        .pause-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 8px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.4);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            z-index: 100;
+            font-size: 14px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+        }
 
-@keyframes wave {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
-    100% { transform: translateY(0); }
-}
+        @media (min-width: 768px) {
+            .pause-button {
+                top: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 16px;
+            }
+        }
 
+        .pause-menu {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(30, 30, 46, 0.95);
+            padding: 20px;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 20px;
+            text-align: center;
+            display: none;
+            z-index: 100;
+        }
 
-.difficulty-card.og {
-    background: linear-gradient(145deg, rgba(255, 0, 0, 0.2), rgba(138, 43, 226, 0.2));
-    border: 2px solid rgba(255, 0, 0, 0.5);
-}
+        @media (min-width: 768px) {
+            .pause-menu {
+                padding: 40px;
+            }
+        }
 
-.difficulty-card.og:hover {
-    transform: translateY(-5px);
-    border-color: rgba(255, 0, 0, 0.8);
-    box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
-}
+        .pause-menu h2 {
+            margin-bottom: 20px;
+        }
 
+        .molandak {
+            width: 60px;
+            height: 60px;
+            position: absolute;
+            background: url('molandak.png') no-repeat center center;
+            background-size: contain;
+            cursor: pointer;
+            transition: transform 0.2s;
+            user-select: none;
+            outline: none;
+            z-index: 10;
+        }
 
-.pause-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    padding: 8px;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: rgba(0, 0, 0, 0.4);
-    border: none;
-    border-radius: 50%;
-    color: white;
-    cursor: pointer;
-    z-index: 100;
-    font-size: 14px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
-}
+        @media (min-width: 768px) {
+            .molandak {
+                width: 70px;
+                height: 70px;
+            }
+        }
 
-.pause-menu {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(30, 30, 46, 0.95);
-    padding: 20px;
-    width: 90%;
-    max-width: 400px;
-    border-radius: 20px;
-    text-align: center;
-    display: none;
-    z-index: 100;
-}
+        .molandak:hover {
+            transform: scale(1.1);
+        }
 
-.pause-menu h2 {
-    margin-bottom: 20px;
-}
+        #game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(30, 30, 46, 0.95);
+            padding: 20px;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 20px;
+            text-align: center;
+            display: none;
+            z-index: 100;
+        }
 
+        @media (min-width: 768px) {
+            #game-over {
+                padding: 40px;
+                max-width: 500px;
+            }
+        }
 
-.molandak {
-    width: 60px;
-    height: 60px;
-    position: absolute;
-    background: url('molandak.png') no-repeat center center;
-    background-size: contain;
-    cursor: pointer;
-    transition: transform 0.2s;
-    user-select: none;
-    outline: none;
-    z-index: 10;
-}
+        .button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(145deg, #9c27b0, #673ab7);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
 
-.molandak:hover {
-    transform: scale(1.1);
-}
+        @media (min-width: 768px) {
+            .button {
+                padding: 12px 24px;
+            }
+        }
 
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
 
-#game-over {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(30, 30, 46, 0.95);
-    padding: 20px;
-    width: 90%;
-    max-width: 400px;
-    border-radius: 20px;
-    text-align: center;
-    display: none;
-    z-index: 100;
-}
+        .game-logo {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 20px;
+            object-fit: contain;
+        }
 
+        @media (min-width: 768px) {
+            .game-logo {
+                width: 200px;
+                height: 200px;
+            }
+        }
 
-.button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 10px;
-    background: linear-gradient(145deg, #9c27b0, #673ab7);
-    color: white;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin: 10px;
-}
+        .social-links {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
 
-.button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
+        @media (min-width: 768px) {
+            .social-links {
+                bottom: 20px;
+                gap: 20px;
+            }
+        }
 
+        .social-icon {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
 
-.game-logo {
-    width: 120px;
-    height: 120px;
-    margin-bottom: 20px;
-    object-fit: contain;
-}
+        @media (min-width: 768px) {
+            .social-icon {
+                width: 32px;
+                height: 32px;
+            }
+        }
 
-/* Social links */
-.social-links {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 15px;
-    align-items: center;
-}
+        .social-icon:hover {
+            transform: translateY(-3px);
+        }
 
-.social-icon {
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-
-.social-icon:hover {
-    transform: translateY(-3px);
-}
-
-.social-divider {
-    width: 2px;
-    height: 20px;
-    background: rgba(255, 255, 255, 0.2);
-}
-
-.social-icon svg {
-    fill: #fff;
-    transition: fill 0.3s ease;
-}
-
-.social-icon:hover svg {
-    fill: #9c27b0;
-}
-
-
-@media (min-width: 480px) {
-    .stat {
-        font-size: 0.95em;
-        padding: 10px 15px;
-    }
-}
-
-@media (min-width: 768px) {
-    .logo {
-        font-size: 3em;
-    }
-    
-    .stats-bar {
-        flex-wrap: nowrap;
-        gap: 15px;
-    }
-    
-    .left-stats, .right-stats {
-        flex-direction: row;
-        flex-wrap: nowrap;
-    }
-    
-    .stat {
-        min-width: auto;
-        margin: 0;
-    }
-    
-    .molandak {
-        width: 70px;
-        height: 70px;
-    }
-    
-    .pause-button {
-        top: 20px;
-        right: 20px;
-        width: 50px;
-        height: 50px;
-        font-size: 16px;
-    }
-    
-    .pause-menu, #game-over {
-        padding: 40px;
-        max-width: 500px;
-    }
-    
-    .button {
-        padding: 12px 24px;
-    }
-    
-    .game-logo {
-        width: 180px;
-        height: 180px;
-    }
-    
-    .social-links {
-        bottom: 20px;
-        gap: 20px;
-    }
-    
-    .social-icon {
-        width: 32px;
-        height: 32px;
-    }
-    
-    .social-divider {
-        height: 24px;
-    }
-}
+        .social-divider {
+            width: 2px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+        }
 
         @media (min-width: 768px) {
             .social-divider {
@@ -634,12 +626,12 @@ body {
             const finalScore = Math.floor(score);
             const rank = getRank(finalScore, currentDifficulty);
             
-            const tweetText = `☄️ Save The Molandak on @monad_xyz\n\n` +
+            const tweetText = `🎮 Save The Molandak\n\n` +
                             `Mode: ${difficulty}\n` +
                             `Score: ${finalScore} points\n` +
                             `Rank: ${rank}\n\n` +
                             `Can you beat my score? 🏆\n` +
-                            `#SaveTheMolandak #Monad`;
+                            `#SaveTheMolandak #GameDev`;
             
             const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
             window.open(tweetUrl, '_blank');
@@ -696,7 +688,7 @@ body {
                             `Score: ${finalScore} points\n` +
                             `Rank: ${rank}\n\n` +
                             `${getScoreMessage(rank, difficulty)}\n` +
-                            `play here : http://save-molandak.vercel.app`;
+                            `can your beat me? play here : http://save-molandak.vercel.app`;
             
             const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
             window.open(tweetUrl, '_blank');
@@ -704,12 +696,12 @@ body {
 
         function getScoreMessage(rank, difficulty) {
             if (difficulty === 'og') {
-                if (rank === 'S') return 'True OG Legend! Can you beat this? 🏆';
-                if (rank === 'A') return 'Almost legendary! Try again for S rank!';
-                return 'Can you become an OG Legend?';
+                if (rank === 'S') return '👑 True OG Legend! Can you beat this? 🏆';
+                if (rank === 'A') return '🔥 Almost legendary! Try again for S rank!';
+                return 'Can you become an OG Legend? 🎯';
             } else {
-                if (rank === 'S') return 'Can you beat my score?';
-                return 'Think you can do better?';
+                if (rank === 'S') return '🏆 Can you beat my score?';
+                return 'Think you can do better? Try it! 🎯';
             }
         }
     </script>
