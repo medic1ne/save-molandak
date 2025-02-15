@@ -683,12 +683,12 @@
             const finalScore = Math.floor(score);
             const rank = getRank(finalScore, currentDifficulty);
             
-            const tweetText = `🎮 Save The Molandak\n\n` +
+            const tweetText = `☄️ Save The Molandak\n\n` +
                             `Mode: ${difficulty}\n` +
                             `Score: ${finalScore} points\n` +
                             `Rank: ${rank}\n\n` +
                             `${getScoreMessage(rank, difficulty)}\n` +
-                            `#SaveTheMolandak #GameDev`;
+                            `can your beat me? play here : http://save-molandak.vercel.app`;
             
             const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
             window.open(tweetUrl, '_blank');
