@@ -482,7 +482,6 @@
             og: { interval: 800, speed: 5, multiplier: 6 }
         };
 
-
         function startGame(difficulty) {
             currentDifficulty = difficulty;
             document.getElementById('welcome-screen').style.display = 'none';
@@ -520,24 +519,6 @@
                 }
             }, 1000);
         }
-
-        function createFire() {
-            const fire = document.createElement("div");
-            fire.classList.add("fire");
-
-            const container = document.getElementById("game-container");
-            fire.style.left = Math.random() * (container.offsetWidth - 80) + "px";
-            fire.style.bottom = "10px"; 
-
-            container.appendChild(fire);
-
-            setTimeout(() => {
-                fire.remove();
-            }, 5000);
-        }
-
-
-        setInterval(createFire, 1000);
 
         
         function togglePause() {
